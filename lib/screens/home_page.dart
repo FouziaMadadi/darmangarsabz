@@ -11,12 +11,12 @@ class _HerbPageState extends State<HerbPage> {
   final List<String> filters = ['گیاهان', 'بیماری‌ها', 'علاقه‌مندی‌ها'];
 
   final List<Map<String, String>> herbs = [
-    {"name": "جوانی بادیان", "image": "assets/images/جوانی بادیان.jpg"},
-    {"name": "حاک شیر", "image": "assets/images/خاک شیر.jpg"},
-    {"name": "نعناع", "image": "assets/images/نعناع.jpg"},
-    {"name": "هلیله سیاه", "image": "assets/images/هلیله سیاه.jpg"},
-    {"name": "گل همیشه بهار", "image": "assets/images/گل همیشه بهار.jpg"},
-    {"name": "شیرین‌بیان", "image": "assets/images/گل گاوزبان.jpg"},
+    {"name": "جوانی بادیان", "image": "assets/images/javani_badian.jpg"},
+    {"name": "حاک شیر", "image": "assets/images/hak_shir_badian.jpg"},
+    {"name": "نعناع", "image": "assets/images/naanaa.jpg"},
+    {"name": "هلیله سیاه", "image": "assets/images/helile_siah.jpg"},
+    {"name": "گل همیشه بهار", "image": "assets/images/gol_hamishe_bahar.jpg"},
+    {"name": "شیرین‌بیان", "image": "assets/images/gol_gavzaban.jpg"},
   ];
 
   @override
@@ -32,7 +32,11 @@ class _HerbPageState extends State<HerbPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("درمانگر سبز", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Vazir')),
+                  Text("درمانگر سبز",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Vazir')),
                   Icon(Icons.menu),
                 ],
               ),
@@ -47,7 +51,9 @@ class _HerbPageState extends State<HerbPage> {
                   prefixIcon: Icon(Icons.search),
                   filled: true,
                   fillColor: Colors.white,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none),
                 ),
               ),
             ),
@@ -69,9 +75,11 @@ class _HerbPageState extends State<HerbPage> {
                     },
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal: 8),
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       decoration: BoxDecoration(
-                        color: isSelected ? Color(0xFF5E3A75) : Color(0xFFE0C9F3),
+                        color:
+                            isSelected ? Color(0xFF5E3A75) : Color(0xFFE0C9F3),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Center(
@@ -141,8 +149,12 @@ class _HerbPageState extends State<HerbPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(icon: Icon(Icons.home, color: Colors.white), onPressed: () {}),
-              IconButton(icon: Icon(Icons.favorite_border, color: Colors.white), onPressed: () {}),
+              IconButton(
+                  icon: Icon(Icons.home, color: Colors.white),
+                  onPressed: () {}),
+              IconButton(
+                  icon: Icon(Icons.favorite_border, color: Colors.white),
+                  onPressed: () {}),
             ],
           ),
         ),
