@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   firebase_core: ^3.13.0
   cloud_firestore: ^5.6.6
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:
@@ -62,7 +63,23 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/
+    - assets/images/gol_gavzaban.jpg
+    - assets/images/gol_hamishe_bahar.jpg
+    - assets/images/javani_badian.jpg
+    - assets/images/hak_shir_badian.jpg
+    - assets/images/naanaa.jpg
+    - assets/images/akinasa.jpg
+    - assets/images/alovera.jpg
+    - assets/images/anghoza.jpg
+    - assets/images/babona.jpg
+    - assets/images/esfarza.jpg
+    - assets/images/espand.jpg
+    - assets/images/diseases/agzema.jpg
+    - assets/images/diseases/akenna.jpg
+    - assets/images/diseases/alzaymer.jpg
+    - assets/images/diseases/asm.jpg
+    - assets/images/diseases/breath.jpg
+    - assets/images/diseases/sorfa.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -76,10 +93,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-#  fonts:
-#    - family: Vazir
-#      fonts:
-#        - asset: fonts/Vazirmatn-Regular.ttf
+  fonts:
+    - family: Vazir
+      fonts:
+      - asset: assets/fonts/Vazirmatn-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

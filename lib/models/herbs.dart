@@ -1,6 +1,6 @@
-class Herb {
+class Plant {
   final String name;
-  final String image;
+  final String imageUrl;
 
-  Herb({required this.name, required this.image});
+  Plant({required this.name, required this.imageUrl});
 }
