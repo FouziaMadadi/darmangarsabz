@@ -1,51 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:darmajgar_sabz/plants_screens/diseases_page.dart';
 import 'package:flutter/material.dart';
 
-class HerbCombinedPage extends StatelessWidget {
-  const HerbCombinedPage({super.key});
+class DiseasesPage extends StatelessWidget {
+  const DiseasesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('درمانگر سبز'),
+        title: const Text('لیست بیماری‌ها'),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.medical_services),
-            tooltip: 'مشاهده بیماری‌ها',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const DiseasesPage()),
-              );
-            },
-          )
-        ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream:
-            FirebaseFirestore.instance.collection('darmanegeyahi').snapshots(),
+            FirebaseFirestore.instance.collection('alamat_bimari').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('هیچ گیاهی ثبت نشده است.'));
+            return const Center(child: Text('هیچ بیماری ثبت نشده است.'));
           }
 
-          final plants = snapshot.data!.docs;
+          final bimariha = snapshot.data!.docs;
 
           return ListView.builder(
-            itemCount: plants.length,
+            itemCount: bimariha.length,
             itemBuilder: (context, index) {
-              final plant = plants[index];
-              final imagePath =
-                  (plant.data() as Map<String, dynamic>).containsKey('image') &&
-                          (plant['image'] as String).isNotEmpty
-                      ? plant['image']
-                      : 'assets/images/default.jpg';
+              final bimari = bimariha[index];
+              final data = bimari.data() as Map<String, dynamic>;
+
+              final imagePath = data.containsKey('image') && data['image'] != ''
+                  ? data['image']
+                  : 'assets/diseases/default.jpg';
 
               return Card(
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -53,29 +40,27 @@ class HerbCombinedPage extends StatelessWidget {
                   leading: CircleAvatar(
                     backgroundImage: AssetImage(imagePath),
                   ),
-                  title: Text(plant['name'] ?? 'نام نامشخص'),
-                  subtitle:
-                      Text(plant['generalInfo'] ?? 'معلومات عمومی موجود نیست'),
+                  title: Text(data['name'] ?? 'نام نامشخص'),
+                  subtitle: Text(data.containsKey('description')
+                      ? data['description']
+                      : 'توضیحات موجود نیست'),
                   onTap: () {
                     showDialog(
                       context: context,
                       builder: (_) => AlertDialog(
-                        title: Text(plant['name'] ?? ''),
+                        title: Text(data['name'] ?? ''),
                         content: SingleChildScrollView(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                  'مشخصات ظاهری: ${plant['appearance'] ?? 'ناموجود'}'),
+                                  'توضیحات: ${data.containsKey('description') ? data['description'] : 'موجود نیست'}'),
                               const SizedBox(height: 8),
                               Text(
-                                  'خواص درمانی: ${plant['benefits'] ?? 'ناموجود'}'),
+                                  'گیاهان موثر: ${data.containsKey('related-plants') ? data['related-plants'] : 'موجود نیست'}'),
                               const SizedBox(height: 8),
                               Text(
-                                  'روش استفاده: ${plant['usage'] ?? 'ناموجود'}'),
-                              const SizedBox(height: 8),
-                              Text(
-                                  'اضرار: ${plant['sideEffects'] ?? 'ناموجود'}'),
+                                  'روش استفاده: ${data.containsKey('usage') ? data['usage'] : 'موجود نیست'}'),
                             ],
                           ),
                         ),
