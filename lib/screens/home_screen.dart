@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onChanged: (value) {
                 setState(() {
                   searchQuery = value.trim();
-                  selectedTab = 0; // هر بار تایپ کرد، روی تب گیاهان سوئیچ کند
+                  selectedTab = 0; // با هر بار تایپ کردن لیست گیاه نیز اپدیت میشود
                 });
               },
             ),
