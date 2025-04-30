@@ -77,9 +77,9 @@ class PlantsScreen extends StatelessWidget {
               },
               child: Card(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // گوشه‌های گرد برای زیبایی
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                elevation: 4, // سایه برای عمق
+                elevation: 4,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -87,9 +87,9 @@ class PlantsScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       child: Image.asset(
                         imagePath,
-                        width: 80, // عرض تصویر ثابت
-                        height: 80, // ارتفاع تصویر ثابت
-                        fit: BoxFit.cover, // مناسب‌ترین نحوه نمایش تصویر
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
                       ),
                     ),
                     const SizedBox(height: 8),
