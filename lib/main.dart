@@ -28,11 +28,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'providers/theme_provider.dart';
-import 'screens/home_page.dart';
 
 import 'firebase_options.dart';
+import 'screens/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,18 +45,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (ctx) => ThemeProvider(),
-      child: Consumer<ThemeProvider>(
-        builder: (ctx, themeProvider, _) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'درمانگر سبز',
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
-          themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-          home: const HomeScreen(),
-        ),
-      ),
+    return MaterialApp(
+      title: 'درمانگر سبز',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(fontFamily: 'Vazir'),
+      home: HomeWithTestButton(),
     );
   }
 }
@@ -70,7 +61,7 @@ class HomeWithTestButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        const HomeScreen(),
+        HerbPage(),
         Positioned(
           bottom: 16,
           right: 16,
@@ -78,23 +69,18 @@ class HomeWithTestButton extends StatelessWidget {
             onPressed: () {
               // ************************************************
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('اتصال به Firebase موفق بود!')),
+                SnackBar(content: Text('اتصال به Firebase موفق بود!')),
               );
               FirebaseFirestore.instance.collection('test').add({
                 'message': 'سلام انجینر صاحب فوزیه جان',
                 'time': Timestamp.now(),
               });
             },
+            child: Icon(Icons.cloud_done),
             tooltip: 'تست اتصال',
-            child: const Icon(Icons.cloud_done),
           ),
         ),
       ],
     );
   }
 }
-
-
-
-
-
