@@ -70,7 +70,7 @@ class HomeWithTestButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        HomeScreen(),
+        const HomeScreen(),
         Positioned(
           bottom: 16,
           right: 16,
@@ -78,7 +78,7 @@ class HomeWithTestButton extends StatelessWidget {
             onPressed: () {
               // ************************************************
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('اتصال به Firebase موفق بود!')),
+                const SnackBar(content: Text('اتصال به Firebase موفق بود!')),
               );
               FirebaseFirestore.instance.collection('test').add({
                 'message': 'سلام انجینر صاحب فوزیه جان',

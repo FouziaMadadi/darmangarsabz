@@ -12,7 +12,7 @@ class DiseaseItem extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6),
       child: ListTile(
         leading: Icon(Icons.local_florist), // به جای عکس، آیکون گیاه
-        //Image.asset(disease.imageUrl, width: 50, height: 50, fit: BoxFit.cover),
+        //leading: Image.asset(disease.imageUrl, width: 50, height: 50, fit: BoxFit.cover),
         title: Text(disease.name),
         trailing: const Icon(Icons.arrow_forward_ios),
       ),

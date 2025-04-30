@@ -12,7 +12,7 @@ class FavoriteListItem extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6),
       child: ListTile(
         leading: Icon(Icons.local_florist), // به جای عکس، آیکون گیاه
-        //Image.asset(favorite.imageUrl, width: 50, height: 50, fit: BoxFit.cover),
+        //leading: Image.asset(favorite.imageUrl, width: 50, height: 50, fit: BoxFit.cover),
         title: Text(favorite.name),
       ),
     );

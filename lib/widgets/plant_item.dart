@@ -12,7 +12,7 @@ class PlantItem extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6),
       child: ListTile(
         leading: Icon(Icons.local_florist), // به جای عکس، آیکون گیاه
-        //Image.asset(plant.imageUrl, width: 50, height: 50, fit: BoxFit.cover),
+        //leading: Image.asset(plant.imageUrl, width: 50, height: 50, fit: BoxFit.cover),
         title: Text(plant.name),
       ),
     );
