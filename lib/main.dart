@@ -1,9 +1,15 @@
-// import 'package:darmajgar_sabz/firebase_options.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:flutter/material.dart';
-//
-// import 'screens/home_page.dart';
-//
+
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+
+import 'firebase_options.dart';
+import 'screens/home_screen.dart';
+import 'package:provider/provider.dart';
+import 'providers/theme_provider.dart';
+
+
 // void main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
 //   await Firebase.initializeApp(
@@ -18,38 +24,43 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return MaterialApp(
-//       title: 'درمانگر سبز',
-//       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(fontFamily: 'Vazir'),
-//       home: HerbPage(),
+//       theme: ThemeData(
+//         primarySwatch: Colors.green,
+//         appBarTheme: const AppBarTheme(
+//           backgroundColor: Colors.green,
+//         ),
+//       ),
+//       home: const HomeScreen(),
 //     );
 //   }
 // }
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-
-import 'firebase_options.dart';
-import 'screens/home_page.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'درمانگر سبز',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Vazir'),
-      home: HomeWithTestButton(),
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.green,
+        ),
+      ),
+      home: const HomeScreen(),
     );
   }
 }
@@ -61,7 +72,7 @@ class HomeWithTestButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        HerbPage(),
+        HomeScreen(),
         Positioned(
           bottom: 16,
           right: 16,
@@ -84,3 +95,51 @@ class HomeWithTestButton extends StatelessWidget {
     );
   }
 }
+
+
+
+
+// import 'package:flutter/material.dart';
+//
+// void main() {
+//   runApp(const MyApp());
+// }
+//
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       theme: ThemeData(
+//         primarySwatch: Colors.green,
+//         appBarTheme: const AppBarTheme(
+//           backgroundColor: Colors.green, // رنگ سبز برای AppBar
+//         ),
+//       ),
+//       home: const HomeScreen(),
+//     );
+//   }
+// }
+//
+//
+// class HomeScreen extends StatelessWidget {
+//   const HomeScreen({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text('درمانگر سبز')),
+//       body: ListView(
+//         padding: const EdgeInsets.all(16),
+//         children: const [
+//           ListTile(title: Text('گیاه اول')),
+//           ListTile(title: Text('گیاه دوم')),
+//           ListTile(title: Text('گیاه سوم')),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+
