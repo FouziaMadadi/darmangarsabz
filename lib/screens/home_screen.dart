@@ -146,19 +146,21 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int selectedTab = 0;
+  String searchText = '';
 
-  final List<Widget> _pages = [
-    PlantsScreen(),
-    DiseasesScreen(),
-    FavoritesScreen(),
-  ];
+
+  // final List<Widget> _pages => [
+  //   PlantsScreen(searchText: searchText),
+  //   DiseasesScreen(searchText: searchText),
+  //   FavoritesScreen(),
+  // ];
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Colors.deepPurple.shade100,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -176,6 +178,28 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
+          //نوار جستجو
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'جستجوی گیاه یا بیماری...',
+                prefixIcon: const Icon(Icons.search),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  searchText = value;
+                });
+              },
+            ),
+          ),
+
           const CustomSearchBar(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -188,7 +212,11 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: IndexedStack(
               index: selectedTab,
-              children: _pages,
+              children: [
+                PlantsScreen(searchText: searchText),
+                DiseasesScreen(searchText: searchText),
+                FavoritesScreen(),
+              ]
             ),
           ),
         ],

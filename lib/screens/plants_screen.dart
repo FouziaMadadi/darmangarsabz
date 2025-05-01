@@ -117,7 +117,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class PlantsScreen extends StatelessWidget {
-  const PlantsScreen({super.key});
+  final String searchText;
+  const PlantsScreen({super.key, required this.searchText});
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +132,11 @@ class PlantsScreen extends StatelessWidget {
           return const Center(child: Text('هیچ گیاهی ثبت نشده است.'));
         }
 
-        final plants = snapshot.data!.docs;
+        final plants = snapshot.data!.docs.where((doc){
+          final data = doc.data() as Map<String, dynamic>;
+          final name = data['name']?.toString().toLowerCase() ?? '';
+          return name.contains(searchText.toLowerCase());
+        }).toList();
 
         return GridView.builder(
           padding: const EdgeInsets.all(12.0),
@@ -144,6 +149,7 @@ class PlantsScreen extends StatelessWidget {
           itemCount: plants.length,
           itemBuilder: (context, index) {
             final plant = plants[index];
+            final data = plant.data() as Map<String, dynamic>;
             final imagePath = plant['image'];
 
             return GestureDetector(
@@ -188,7 +194,7 @@ class PlantsScreen extends StatelessWidget {
                           ? Image.network(
                         imagePath,
                         width: double.infinity,
-                        height: 90,
+                        height: 120,
                         fit: BoxFit.cover,
                       )
                           : Image.asset(
