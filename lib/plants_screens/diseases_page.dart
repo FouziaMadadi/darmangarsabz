@@ -57,10 +57,10 @@ class DiseasesPage extends StatelessWidget {
                                   'توضیحات: ${data.containsKey('description') ? data['description'] : 'موجود نیست'}'),
                               const SizedBox(height: 8),
                               Text(
-                                  'گیاهان موثر: ${data.containsKey('related-plants') ? data['related-plants'] : 'موجود نیست'}'),
+                                  'گیاهان موثر: ${data.containsKey('related_plants') ? data['related_plants'] : 'موجود نیست'}'),
                               const SizedBox(height: 8),
                               Text(
-                                  'روش استفاده: ${data.containsKey('usage') ? data['usage'] : 'موجود نیست'}'),
+                                  'روش استفاده: ${data.containsKey('usage_method') ? data['usage_method'] : 'موجود نیست'}'),
                             ],
                           ),
                         ),
