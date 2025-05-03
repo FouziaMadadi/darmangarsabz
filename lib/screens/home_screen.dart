@@ -136,6 +136,8 @@ import '../screens/favorites_screen.dart';
 import '../widgets/search_bar.dart';
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
+import 'package:persian_fonts/persian_fonts.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -148,26 +150,27 @@ class _HomeScreenState extends State<HomeScreen> {
   int selectedTab = 0;
   String searchText = '';
 
-
-  // final List<Widget> _pages => [
-  //   PlantsScreen(searchText: searchText),
-  //   DiseasesScreen(searchText: searchText),
-  //   FavoritesScreen(),
-  // ];
-
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: Colors.deepPurple.shade100,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black
+          : Colors.deepPurple.shade100,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'درمانگر سبز',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontFamily: 'Vazir',
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.white
+                : Colors.black,
+            fontSize: 18,
+          ),
         ),
         actions: [
           IconButton(
@@ -176,31 +179,20 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+
       body: Column(
         children: [
           //نوار جستجو
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'جستجوی گیاه یا بیماری...',
-                prefixIcon: const Icon(Icons.search),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  searchText = value;
-                });
-              },
-            ),
+          CustomSearchBar(
+            selectedTab: selectedTab,
+            onSearchChanged: (value) {
+              setState(() {
+                searchText = value;
+              });
+            },
           ),
 
-          const CustomSearchBar(),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -216,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 PlantsScreen(searchText: searchText),
                 DiseasesScreen(searchText: searchText),
                 FavoritesScreen(),
-              ]
+              ],
             ),
           ),
         ],
@@ -225,46 +217,73 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedIndex: selectedTab,
         onTabSelected: (index) {
           if (index == 1) {
-            // آیکون مهتاب => تغییر تم
             themeProvider.toggleTheme();
           } else {
             setState(() {
-              selectedTab = index == 0 ? 0 : 2;
+              if (index == 0) {
+                if (selectedTab == 0) {
+                  searchText = '';
+                }
+                selectedTab = 0;
+              } else if (index == 2) {
+                selectedTab = 2; 
+              }
             });
           }
         },
       ),
+
     );
   }
 
   Widget _buildTabButton(String title, int index) {
-    bool isSelected = selectedTab == index;
-    bool isMainTab = index == 0 || index == 1;
+    final isSelected = selectedTab == index;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final tabCount = 3;
+    final horizontalPadding = 24.0;
+    final totalPadding = horizontalPadding * 2;
+    final totalSpacing = (tabCount - 1) * 3.0;
+    final tabWidth = (screenWidth - totalPadding - totalSpacing) / tabCount;
 
-    return TextButton(
-      onPressed: () {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+
+    final inactiveColor = isDarkMode
+        ? Colors.white
+        : Colors.purple.shade200;
+
+    final inactiveTextColor = isDarkMode
+        ? Colors.black
+        : Colors.white;
+
+    return GestureDetector(
+      onTap: () {
         setState(() {
           selectedTab = index;
         });
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        width: tabWidth,
+        margin: const EdgeInsets.symmetric(horizontal: 1.5),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected
-              ? Colors.deepPurple
-              : isMainTab
-              ? Colors.deepPurple.shade100
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: isSelected ? Colors.deepPurple : Colors.transparent,
+            width: 2,
+          ),
+          color: isSelected ? Colors.deepPurple : inactiveColor,
         ),
-        child: Text(
-          title,
-          style: TextStyle(
-            color: isSelected ? Colors.white : Colors.black,
+        child: Center(
+          child: Text(
+            title,
+            style: TextStyle(
+              color: isSelected ? Colors.white : inactiveTextColor,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
     );
   }
-}
+  }

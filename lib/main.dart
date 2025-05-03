@@ -27,17 +27,22 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'درمانگر سبز',
-            theme: ThemeData(
-              brightness: Brightness.light,
-              primarySwatch: Colors.green,
-              fontFamily: 'Vazir', // اگر فونت فارسی اضافه کردی
+            theme: ThemeData.light().copyWith(
+              scaffoldBackgroundColor: Colors.grey[100],
+              appBarTheme: const AppBarTheme(
+                backgroundColor: Colors.purple,
+                foregroundColor: Colors.white,
+              ),
             ),
-            darkTheme: ThemeData(
-              brightness: Brightness.dark,
-              primarySwatch: Colors.green,
-              fontFamily: 'Vazir',
+            darkTheme: ThemeData.dark().copyWith(
+              scaffoldBackgroundColor: Colors.black,
+              appBarTheme: const AppBarTheme(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+              ),
             ),
             themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+
             home: const HomeScreen(),
           );
         },

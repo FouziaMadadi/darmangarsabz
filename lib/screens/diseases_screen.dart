@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -13,11 +14,20 @@ class DiseasesScreen extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Center(child: Text('هیچ بیماری ثبت نشده است.'));
+        if (!snapshot.hasData) {
+          return const Center(child: Text('داده‌ای یافت نشد.'));
         }
 
-        final bimariha = snapshot.data!.docs;
+        // فیلتر بر اساس جستجو
+        final bimariha = snapshot.data!.docs.where((doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          final name = data['name']?.toString().toLowerCase() ?? '';
+          return name.contains(searchText.toLowerCase());
+        }).toList();
+
+        if (bimariha.isEmpty) {
+          return const Center(child: Text('هیچ بیماری مطابق جستجو پیدا نشد.'));
+        }
 
         return ListView.builder(
           itemCount: bimariha.length,
@@ -62,7 +72,6 @@ class DiseasesScreen extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
-                    // عکس بیماری
                     ClipRRect(
                       borderRadius: const BorderRadius.horizontal(left: Radius.circular(16)),
                       child: Image.network(
@@ -79,7 +88,6 @@ class DiseasesScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    // نام بیماری
                     Expanded(
                       child: Text(
                         name,
@@ -96,3 +104,4 @@ class DiseasesScreen extends StatelessWidget {
     );
   }
 }
+
