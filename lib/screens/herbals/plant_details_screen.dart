@@ -22,7 +22,6 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final textColor = isDarkMode ? Colors.white : Colors.black;
 
     return Scaffold(
       backgroundColor: isDarkMode ? Colors.black : const Color(0xFFE1BEE7),
