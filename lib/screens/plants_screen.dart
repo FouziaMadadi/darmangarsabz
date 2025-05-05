@@ -2,6 +2,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'herbals/plant_details_screen.dart';
+
 class PlantsScreen extends StatelessWidget {
   final String searchText;
   const PlantsScreen({super.key, required this.searchText});
@@ -40,33 +42,14 @@ class PlantsScreen extends StatelessWidget {
 
             return GestureDetector(
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text(plant['name'] ?? ''),
-                    content: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('مشخصات ظاهری: ${plant['appearance'] ?? 'ناموجود'}'),
-                          const SizedBox(height: 8),
-                          Text('خواص درمانی: ${plant['benefits'] ?? 'ناموجود'}'),
-                          const SizedBox(height: 8),
-                          Text('روش استفاده: ${plant['usage'] ?? 'ناموجود'}'),
-                          const SizedBox(height: 8),
-                          Text('اضرار: ${plant['sideEffects'] ?? 'ناموجود'}'),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('بستن'),
-                      ),
-                    ],
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PlantDetailsScreen(docId: plant.id),
                   ),
                 );
               },
+
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

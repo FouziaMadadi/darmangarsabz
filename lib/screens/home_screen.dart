@@ -140,15 +140,23 @@ import 'package:persian_fonts/persian_fonts.dart';
 
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final int initialTab;
+
+  const HomeScreen({super.key, required this.initialTab}); // دریافت initialTab
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+
 class _HomeScreenState extends State<HomeScreen> {
-  int selectedTab = 0;
+  late int selectedTab;
   String searchText = '';
+  @override
+  void initState() {
+    super.initState();
+    selectedTab = widget.initialTab;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +236,8 @@ class _HomeScreenState extends State<HomeScreen> {
               } else if (index == 2) {
                 selectedTab = 2; 
               }
-            });
+            }
+            );
           }
         },
       ),

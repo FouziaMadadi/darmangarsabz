@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
             ),
             themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
-            home: const HomeScreen(),
+            home: const HomeScreen(initialTab: 0,),
           );
         },
       ),

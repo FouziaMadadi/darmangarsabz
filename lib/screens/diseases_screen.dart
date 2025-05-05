@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'diseases/details_screen.dart';
 
 class DiseasesScreen extends StatelessWidget {
   final String searchText;
@@ -18,7 +19,6 @@ class DiseasesScreen extends StatelessWidget {
           return const Center(child: Text('داده‌ای یافت نشد.'));
         }
 
-        // فیلتر بر اساس جستجو
         final bimariha = snapshot.data!.docs.where((doc) {
           final data = doc.data() as Map<String, dynamic>;
           final name = data['name']?.toString().toLowerCase() ?? '';
@@ -39,28 +39,10 @@ class DiseasesScreen extends StatelessWidget {
 
             return GestureDetector(
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text(name),
-                    content: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('توضیحات: ${data['description'] ?? 'موجود نیست'}'),
-                          const SizedBox(height: 8),
-                          Text('گیاهان موثر: ${data['related-plants'] ?? 'موجود نیست'}'),
-                          const SizedBox(height: 8),
-                          Text('روش استفاده: ${data['usage'] ?? 'موجود نیست'}'),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('بستن'),
-                      ),
-                    ],
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => DetailsScreen(docId: bimari.id), // doc.id از Firestore
                   ),
                 );
               },
