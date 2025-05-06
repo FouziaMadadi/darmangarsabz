@@ -1,5 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/theme_provider.dart';
+import '../../widgets/custom_bottom_navbar.dart';
+import '../home_screen.dart';
 
 class DetailsScreen extends StatefulWidget {
   final String docId;
@@ -11,38 +16,49 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   int selectedIndex = 0;
-  String title = 'در حال بارگذاری...';
-
-  @override
-  void initState() {
-    super.initState();
-    fetchTitle();
-  }
-
-  Future<void> fetchTitle() async {
-    final doc = await FirebaseFirestore.instance
-        .collection('alamat_bimari')
-        .doc(widget.docId)
-        .get();
-
-    if (doc.exists) {
-      final data = doc.data() as Map<String, dynamic>;
-      setState(() {
-        title = data['title'] ?? 'نام بیماری';
-      });
-    } else {
-      setState(() {
-        title = 'نام بیماری پیدا نشد';
-      });
-    }
-  }
+  int selectedTab = 0;
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
+      backgroundColor: isDarkMode ? Colors.black : const Color(0xFFE1BEE7),
       appBar: AppBar(
-        title: Text(title, style: const TextStyle(fontSize: 18)),
+        backgroundColor: isDarkMode ? Colors.grey[900] : const Color(0xFFE1BEE7),
+        toolbarHeight: 80,
+        titleSpacing: 20,
+        title: FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance
+              .collection('alamat_bimari')
+              .doc(widget.docId)
+              .get(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
+
+            if (!snapshot.hasData || !snapshot.data!.exists) {
+              return const Text('نام گیاه پیدا نشد');
+            }
+
+            final data = snapshot.data!.data() as Map<String, dynamic>;
+            final title = data['name'] ?? 'نام بیماری';
+
+            return Text(
+              title,
+              style: TextStyle(
+                color: isDarkMode ? Colors.white : Colors.black,
+                fontSize: 16,
+              ),
+            );
+          },
+        ),
         centerTitle: true,
+        iconTheme: IconThemeData(
+          color: isDarkMode ? Colors.white : Colors.black,
+        ),
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance
@@ -69,7 +85,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               Center(
                 child: CircleAvatar(
                   radius: 90,
-                  backgroundImage: imageUrl.toString().startsWith('http')
+                  backgroundImage: imageUrl.startsWith('http')
                       ? NetworkImage(imageUrl)
                       : AssetImage(imageUrl) as ImageProvider,
                 ),
@@ -77,39 +93,86 @@ class _DetailsScreenState extends State<DetailsScreen> {
               const SizedBox(height: 16),
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: isDarkMode ? Colors.grey[850] : Colors.white.withOpacity(0.9),
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  child: SingleChildScrollView(
-                    child: Text(
-                      selectedIndex == 0 ? generalInfo : usage,
-                      style: const TextStyle(fontSize: 16, height: 1.6),
-                      textAlign: TextAlign.justify,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: SingleChildScrollView(
+                      key: ValueKey<int>(selectedIndex),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: selectedIndex == 0
+                            ? Text(
+                          generalInfo,
+                          style: TextStyle(
+                            fontSize: 16,
+                            height: 1.6,
+                            color: isDarkMode ? Colors.white : Colors.black,
+                          ),
+                          textAlign: TextAlign.justify,
+                        )
+                            : selectedIndex == 1
+                            ? Text(
+                          usage,
+                          style: TextStyle(
+                            fontSize: 16,
+                            height: 1.6,
+                            color: isDarkMode ? Colors.white : Colors.black,
+                          ),
+                          textAlign: TextAlign.justify,
+                        )
+                            : Container(),
+                      ),
                     ),
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  tabButton(Icons.info, 0, 'معلومات عمومی'),
-                  const SizedBox(width: 16),
-                  tabButton(Icons.local_hospital, 1, 'روش استفاده'),
-                ],
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    tabButton(Icons.info, 0),
+                    const SizedBox(width: 12),
+                    tabButton(Icons.favorite, 1),
+                  ],
+                ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 4),
             ],
           );
+        },
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: selectedTab,
+        onTabSelected: (index) {
+          if (index == 1) {
+            themeProvider.toggleTheme();
+          } else {
+            if (index == 0 || index == 2) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(initialTab: index),
+                ),
+              );
+            }
+            setState(() {
+              selectedTab = index;
+            });
+          }
         },
       ),
     );
   }
 
-  Widget tabButton(IconData icon, int index, String label) {
-    final isSelected = selectedIndex == index;
+  Widget tabButton(IconData icon, int index) {
+    final bool isSelected = selectedIndex == index;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -117,25 +180,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
         });
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.purple : Colors.purple[100],
+          color: isSelected ? Colors.purple[300] : Colors.purple[100],
           borderRadius: BorderRadius.circular(30),
         ),
-        child: Row(
-          children: [
-            Icon(icon, color: isSelected ? Colors.white : Colors.black),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+        child: Icon(
+          icon,
+          color: isSelected ? Colors.white : Colors.black,
+          size: 28,
         ),
       ),
     );
   }
 }
+

@@ -27,8 +27,9 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
     return Scaffold(
       backgroundColor: isDarkMode ? Colors.black : const Color(0xFFE1BEE7),
       appBar: AppBar(
-        backgroundColor:
-            isDarkMode ? Colors.grey[900] : const Color(0xFFE1BEE7),
+        backgroundColor: isDarkMode ? Colors.grey[900] : const Color(0xFFE1BEE7),
+        toolbarHeight: 80, // افزایش ارتفاع برای فاصله از بالا
+        titleSpacing: 20, // فاصله‌ی بیشتر از لبه‌ها
         title: FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
               .collection('darmanegeyahi')
@@ -48,12 +49,17 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
 
             return Text(
               title,
-              style: const TextStyle(color: Colors.black, fontSize: 16),
+              style: TextStyle(
+                color: isDarkMode ? Colors.white : Colors.black, // رنگ داینامیک
+                fontSize: 16,
+              ),
             );
           },
         ),
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: isDarkMode ? Colors.white : Colors.black, // آیکن‌ها هم سفید در دارک مود
+        ),
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance
