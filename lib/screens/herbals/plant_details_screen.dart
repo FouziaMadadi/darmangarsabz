@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../providers/theme_provider.dart';
 import '../../widgets/custom_bottom_navbar.dart';
 import '../home_screen.dart';
 
 class PlantDetailsScreen extends StatefulWidget {
-  final String docId; // شناسه مستند گیاه
+  final String docId;
 
   const PlantDetailsScreen({super.key, required this.docId});
 
@@ -26,10 +27,11 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
     return Scaffold(
       backgroundColor: isDarkMode ? Colors.black : const Color(0xFFE1BEE7),
       appBar: AppBar(
-        backgroundColor: isDarkMode ? Colors.grey[900] : const Color(0xFFE1BEE7),
-      title: FutureBuilder<DocumentSnapshot>(
+        backgroundColor:
+            isDarkMode ? Colors.grey[900] : const Color(0xFFE1BEE7),
+        title: FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
-              .collection('darmanegeyahi') // نام کالکشن گیاهان
+              .collection('darmanegeyahi')
               .doc(widget.docId)
               .get(),
           builder: (context, snapshot) {
@@ -54,17 +56,21 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
         iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance.collection('darmanegeyahi').doc(widget.docId).get(),
+        future: FirebaseFirestore.instance
+            .collection('darmanegeyahi')
+            .doc(widget.docId)
+            .get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
+
           if (!snapshot.hasData || !snapshot.data!.exists) {
             return const Center(child: Text('داده‌ای یافت نشد.'));
           }
 
           final data = snapshot.data!.data() as Map<String, dynamic>;
-          final imageUrl = data['image'] ?? 'https://via.placeholder.com/150';
+          final imageUrl = data['image'] ?? 'assets/images/default.jpg';
           final appearance = data['appearance'] ?? 'ناموجود';
           final benefits = data['benefits'] ?? 'ناموجود';
           final usage = data['usage'] ?? 'ناموجود';
@@ -76,16 +82,21 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
               Center(
                 child: CircleAvatar(
                   radius: 90,
-                  backgroundImage: NetworkImage(imageUrl),
+                  backgroundImage: imageUrl.startsWith('http')
+                      ? NetworkImage(imageUrl)
+                      : AssetImage(imageUrl) as ImageProvider,
                 ),
               ),
               const SizedBox(height: 16),
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: isDarkMode ? Colors.grey[850] : Colors.white.withOpacity(0.9),
+                    color: isDarkMode
+                        ? Colors.grey[850]
+                        : Colors.white.withOpacity(0.9),
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: AnimatedSwitcher(
@@ -94,40 +105,42 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                       key: ValueKey<int>(selectedIndex),
                       child: Align(
                         alignment: Alignment.topRight,
-                        child: Container(
-                          alignment: Alignment.topRight,
-                          child: selectedIndex == 0
-                              ? Text(
-                            'مشخصات ظاهری: $appearance\n\nخواص درمانی: $benefits',
-                            style: TextStyle(
-                              fontSize: 16,
-                              height: 1.6,
-                              color: isDarkMode ? Colors.white : Colors.black,
-                            ),
-                            textAlign: TextAlign.justify,
-                          )
-                              : selectedIndex == 1
-                              ? Text(
-                            'روش استفاده: $usage',
-                            style: TextStyle(
-                              fontSize: 16,
-                              height: 1.6,
-                              color: isDarkMode ? Colors.white : Colors.black,
-                            ),
-                            textAlign: TextAlign.justify,
-                          )
-                              : selectedIndex == 2
-                              ? Text(
-                            'اضرار: $sideEffects',
-                            style: TextStyle(
-                              fontSize: 16,
-                              height: 1.6,
-                              color: isDarkMode ? Colors.white : Colors.black,
-                            ),
-                            textAlign: TextAlign.justify,
-                          )
-                              : Container(),
-                        ),
+                        child: selectedIndex == 0
+                            ? Text(
+                                'مشخصات ظاهری: $appearance\n\nخواص درمانی: $benefits',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  height: 1.6,
+                                  color:
+                                      isDarkMode ? Colors.white : Colors.black,
+                                ),
+                                textAlign: TextAlign.justify,
+                              )
+                            : selectedIndex == 1
+                                ? Text(
+                                    'روش استفاده: $usage',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      height: 1.6,
+                                      color: isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                    textAlign: TextAlign.justify,
+                                  )
+                                : selectedIndex == 2
+                                    ? Text(
+                                        'اضرار: $sideEffects',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          height: 1.6,
+                                          color: isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                        textAlign: TextAlign.justify,
+                                      )
+                                    : Container(),
                       ),
                     ),
                   ),
@@ -174,7 +187,8 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
       ),
     );
   }
-Widget tabButton(IconData icon, int index) {
+
+  Widget tabButton(IconData icon, int index) {
     final bool isSelected = selectedIndex == index;
     return GestureDetector(
       onTap: () {
@@ -197,5 +211,3 @@ Widget tabButton(IconData icon, int index) {
     );
   }
 }
-
-

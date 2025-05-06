@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +10,8 @@ class PlantsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('darmanegeyahi').snapshots(),
+      stream:
+          FirebaseFirestore.instance.collection('darmanegeyahi').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -20,7 +20,7 @@ class PlantsScreen extends StatelessWidget {
           return const Center(child: Text('هیچ گیاهی ثبت نشده است.'));
         }
 
-        final plants = snapshot.data!.docs.where((doc){
+        final plants = snapshot.data!.docs.where((doc) {
           final data = doc.data() as Map<String, dynamic>;
           final name = data['name']?.toString().toLowerCase() ?? '';
           return name.contains(searchText.toLowerCase());
@@ -38,7 +38,7 @@ class PlantsScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final plant = plants[index];
             final data = plant.data() as Map<String, dynamic>;
-            final imagePath = plant['image'];
+            final imagePath = data['image'] ?? 'assets/images/default.jpg';
 
             return GestureDetector(
               onTap: () {
@@ -49,7 +49,6 @@ class PlantsScreen extends StatelessWidget {
                   ),
                 );
               },
-
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -58,26 +57,21 @@ class PlantsScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                      child: imagePath != null && imagePath.isNotEmpty
-                          ? Image.network(
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(12)),
+                      child: Image.asset(
                         imagePath,
                         width: double.infinity,
                         height: 120,
-                        fit: BoxFit.cover,
-                      )
-                          : Image.asset(
-                        'assets/images/default.jpg',
-                        width: double.infinity,
-                        height: 90,
                         fit: BoxFit.cover,
                       ),
                     ),
                     Expanded(
                       child: Center(
                         child: Text(
-                          plant['name'] ?? 'نام نامشخص',
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          data['name'] ?? 'نام نامشخص',
+                          style: const TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                       ),
