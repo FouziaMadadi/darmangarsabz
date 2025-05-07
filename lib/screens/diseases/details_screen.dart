@@ -18,6 +18,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   int selectedIndex = 0;
   int selectedTab = 0;
 
+
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
@@ -40,7 +41,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             }
 
             if (!snapshot.hasData || !snapshot.data!.exists) {
-              return const Text('نام گیاه پیدا نشد');
+              return const Text('نام بیماری پیدا نشد');
             }
 
             final data = snapshot.data!.data() as Map<String, dynamic>;
@@ -81,56 +82,68 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
           return Column(
             children: [
-              const SizedBox(height: 16),
-              Center(
-                child: CircleAvatar(
-                  radius: 90,
-                  backgroundImage: imageUrl.startsWith('http')
-                      ? NetworkImage(imageUrl)
-                      : AssetImage(imageUrl) as ImageProvider,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: isDarkMode ? Colors.grey[850] : Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
+              const SizedBox(height: 60),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+
+                  Container(
+                    margin: const EdgeInsets.only(top: 70),
+                    padding: const EdgeInsets.fromLTRB(16, 80, 16, 16),
+                    width: MediaQuery.of(context).size.width * 0.85,
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    decoration: BoxDecoration(
+                      color: isDarkMode ? Colors.grey[850] : Colors.white.withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(32),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
                     child: SingleChildScrollView(
-                      key: ValueKey<int>(selectedIndex),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: selectedIndex == 0
-                            ? Text(
-                          generalInfo,
-                          style: TextStyle(
-                            fontSize: 16,
-                            height: 1.6,
-                            color: isDarkMode ? Colors.white : Colors.black,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        child: Align(
+                          key: ValueKey<int>(selectedIndex),
+                          alignment: Alignment.topRight,
+                          child: Text(
+                            selectedIndex == 0 ? generalInfo : usage,
+                            style: TextStyle(
+                              fontSize: 16,
+                              height: 1.6,
+                              color: isDarkMode ? Colors.white : Colors.black,
+                            ),
+                            textAlign: TextAlign.justify,
                           ),
-                          textAlign: TextAlign.justify,
-                        )
-                            : selectedIndex == 1
-                            ? Text(
-                          usage,
-                          style: TextStyle(
-                            fontSize: 16,
-                            height: 1.6,
-                            color: isDarkMode ? Colors.white : Colors.black,
-                          ),
-                          textAlign: TextAlign.justify,
-                        )
-                            : Container(),
+                        ),
                       ),
                     ),
                   ),
-                ),
+
+                  Positioned(
+                    top: -30,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: CircleAvatar(
+                        radius: 90,
+                        backgroundColor: isDarkMode ? Colors.grey[850] : Colors.white.withOpacity(0.9),
+                        child: CircleAvatar(
+                          radius: 80,
+                          backgroundImage: imageUrl.startsWith('http')
+                              ? NetworkImage(imageUrl)
+                              : AssetImage(imageUrl) as ImageProvider,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
+              const SizedBox(height: 24),
+
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Row(
@@ -146,8 +159,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
               const SizedBox(height: 4),
             ],
           );
+
+
         },
       ),
+
+
+
+
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: selectedTab,
         onTabSelected: (index) {
