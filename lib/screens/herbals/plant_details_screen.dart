@@ -88,7 +88,6 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
               Stack(
                 clipBehavior: Clip.none,
                 children: [
-
                   Container(
                     margin: const EdgeInsets.only(top: 70),
                     padding: const EdgeInsets.fromLTRB(16, 80, 16, 16),
@@ -105,43 +104,48 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                         ),
                       ],
                     ),
-                    child: SingleChildScrollView(
+                    child: Directionality(
+                      textDirection: TextDirection.rtl, // راست به چپ
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
-                        child: Align(
+                        child: SizedBox.expand(
                           key: ValueKey<int>(selectedIndex),
-                          alignment: Alignment.topRight,
-                          child: selectedIndex == 0
-                              ? Text(
-                            'مشخصات ظاهری: $appearance\n\nخواص درمانی: $benefits',
-                            style: TextStyle(
-                              fontSize: 16,
-                              height: 1.6,
-                              color: isDarkMode ? Colors.white : Colors.black,
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: selectedIndex == 0
+                                  ? Text(
+                                'مشخصات ظاهری: $appearance\n\nخواص درمانی: $benefits',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  height: 1.6,
+                                  color: isDarkMode ? Colors.white : Colors.black,
+                                ),
+                                textAlign: TextAlign.justify,
+                              )
+                                  : selectedIndex == 1
+                                  ? Text(
+                                'روش استفاده: $usage',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  height: 1.6,
+                                  color: isDarkMode ? Colors.white : Colors.black,
+                                ),
+                                textAlign: TextAlign.justify,
+                              )
+                                  : selectedIndex == 2
+                                  ? Text(
+                                'اضرار: $sideEffects',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  height: 1.6,
+                                  color: isDarkMode ? Colors.white : Colors.black,
+                                ),
+                                textAlign: TextAlign.justify,
+                              )
+                                  : Container(),
                             ),
-                            textAlign: TextAlign.justify,
-                          )
-                              : selectedIndex == 1
-                              ? Text(
-                            'روش استفاده: $usage',
-                            style: TextStyle(
-                              fontSize: 16,
-                              height: 1.6,
-                              color: isDarkMode ? Colors.white : Colors.black,
-                            ),
-                            textAlign: TextAlign.justify,
-                          )
-                              : selectedIndex == 2
-                              ? Text(
-                            'اضرار: $sideEffects',
-                            style: TextStyle(
-                              fontSize: 16,
-                              height: 1.6,
-                              color: isDarkMode ? Colors.white : Colors.black,
-                            ),
-                            textAlign: TextAlign.justify,
-                          )
-                              : Container(),
+                          ),
                         ),
                       ),
                     ),
@@ -167,7 +171,6 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                 ],
               ),
               const SizedBox(height: 24),
-
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Row(
@@ -186,6 +189,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
               const SizedBox(height: 4),
             ],
           );
+
         },
       ),
 

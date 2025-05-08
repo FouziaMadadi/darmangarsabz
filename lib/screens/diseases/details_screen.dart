@@ -86,7 +86,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
               Stack(
                 clipBehavior: Clip.none,
                 children: [
-
                   Container(
                     margin: const EdgeInsets.only(top: 70),
                     padding: const EdgeInsets.fromLTRB(16, 80, 16, 16),
@@ -103,20 +102,25 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         ),
                       ],
                     ),
-                    child: SingleChildScrollView(
+                    child: Directionality(
+                      textDirection: TextDirection.rtl,
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
-                        child: Align(
+                        child: SizedBox.expand(
                           key: ValueKey<int>(selectedIndex),
-                          alignment: Alignment.topRight,
-                          child: Text(
-                            selectedIndex == 0 ? generalInfo : usage,
-                            style: TextStyle(
-                              fontSize: 16,
-                              height: 1.6,
-                              color: isDarkMode ? Colors.white : Colors.black,
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(
+                                selectedIndex == 0 ? generalInfo : usage,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  height: 1.6,
+                                  color: isDarkMode ? Colors.white : Colors.black,
+                                ),
+                                textAlign: TextAlign.justify,
+                              ),
                             ),
-                            textAlign: TextAlign.justify,
                           ),
                         ),
                       ),
@@ -143,7 +147,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ],
               ),
               const SizedBox(height: 24),
-
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Row(
@@ -159,6 +162,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
               const SizedBox(height: 4),
             ],
           );
+
+
 
 
         },
