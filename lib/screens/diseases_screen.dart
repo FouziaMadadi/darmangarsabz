@@ -117,7 +117,6 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
       ),
     );
   }
-
   List<Widget> _buildRowContent(
       String name, String imageUrl, bool isSelected, bool imageRight, Color textColor) {
     final imageWidget = CircleAvatar(
