@@ -27,8 +27,9 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
     return Scaffold(
       backgroundColor: isDarkMode ? Colors.black : const Color(0xFFE1BEE7),
       appBar: AppBar(
-        backgroundColor:
-            isDarkMode ? Colors.grey[900] : const Color(0xFFE1BEE7),
+        backgroundColor: isDarkMode ? Colors.grey[900] : const Color(0xFFE1BEE7),
+        toolbarHeight: 80,
+        titleSpacing: 20,
         title: FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
               .collection('darmanegeyahi')
@@ -48,12 +49,17 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
 
             return Text(
               title,
-              style: const TextStyle(color: Colors.black, fontSize: 16),
+              style: TextStyle(
+                color: isDarkMode ? Colors.white : Colors.black,
+                fontSize: 16,
+              ),
             );
           },
         ),
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: isDarkMode ? Colors.white : Colors.black,
+        ),
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance
@@ -78,74 +84,93 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
 
           return Column(
             children: [
-              const SizedBox(height: 16),
-              Center(
-                child: CircleAvatar(
-                  radius: 90,
-                  backgroundImage: imageUrl.startsWith('http')
-                      ? NetworkImage(imageUrl)
-                      : AssetImage(imageUrl) as ImageProvider,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: isDarkMode
-                        ? Colors.grey[850]
-                        : Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    child: SingleChildScrollView(
-                      key: ValueKey<int>(selectedIndex),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: selectedIndex == 0
-                            ? Text(
+              const SizedBox(height: 60),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 70),
+                    padding: const EdgeInsets.fromLTRB(16, 80, 16, 16),
+                    width: MediaQuery.of(context).size.width * 0.85,
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    decoration: BoxDecoration(
+                      color: isDarkMode ? Colors.grey[850] : Colors.white.withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(32),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Directionality(
+                      textDirection: TextDirection.rtl, // راست به چپ
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        child: SizedBox.expand(
+                          key: ValueKey<int>(selectedIndex),
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: selectedIndex == 0
+                                  ? Text(
                                 'مشخصات ظاهری: $appearance\n\nخواص درمانی: $benefits',
                                 style: TextStyle(
                                   fontSize: 16,
                                   height: 1.6,
-                                  color:
-                                      isDarkMode ? Colors.white : Colors.black,
+                                  color: isDarkMode ? Colors.white : Colors.black,
                                 ),
                                 textAlign: TextAlign.justify,
                               )
-                            : selectedIndex == 1
-                                ? Text(
-                                    'روش استفاده: $usage',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      height: 1.6,
-                                      color: isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
-                                    ),
-                                    textAlign: TextAlign.justify,
-                                  )
-                                : selectedIndex == 2
-                                    ? Text(
-                                        'اضرار: $sideEffects',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          height: 1.6,
-                                          color: isDarkMode
-                                              ? Colors.white
-                                              : Colors.black,
-                                        ),
-                                        textAlign: TextAlign.justify,
-                                      )
-                                    : Container(),
+                                  : selectedIndex == 1
+                                  ? Text(
+                                'روش استفاده: $usage',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  height: 1.6,
+                                  color: isDarkMode ? Colors.white : Colors.black,
+                                ),
+                                textAlign: TextAlign.justify,
+                              )
+                                  : selectedIndex == 2
+                                  ? Text(
+                                'اضرار: $sideEffects',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  height: 1.6,
+                                  color: isDarkMode ? Colors.white : Colors.black,
+                                ),
+                                textAlign: TextAlign.justify,
+                              )
+                                  : Container(),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+
+                  Positioned(
+                    top: -30,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: CircleAvatar(
+                        radius: 90,
+                        backgroundColor: isDarkMode ? Colors.grey[850] : Colors.white.withOpacity(0.9),
+                        child: CircleAvatar(
+                          radius: 80,
+                          backgroundImage: imageUrl.startsWith('http')
+                              ? NetworkImage(imageUrl)
+                              : AssetImage(imageUrl) as ImageProvider,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
+              const SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Row(
@@ -154,17 +179,20 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                   children: [
                     tabButton(Icons.info, 0),
                     const SizedBox(width: 12),
-                    tabButton(Icons.tag_faces, 1),
+                    tabButton(Icons.local_cafe, 1),
                     const SizedBox(width: 12),
-                    tabButton(Icons.favorite, 2),
+                    tabButton(Icons.monitor_heart, 2),
+                    const SizedBox(width: 12),
                   ],
                 ),
               ),
               const SizedBox(height: 4),
             ],
           );
+
         },
       ),
+
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: selectedTab,
         onTabSelected: (index) {

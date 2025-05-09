@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'providers/theme_provider.dart';
+import 'package:flutter_localization/flutter_localization.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,7 +45,15 @@ class MyApp extends StatelessWidget {
             ),
             themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
-            home: const HomeScreen(initialTab: 0,),
+
+            builder: (context, child) {
+              return Directionality(
+                textDirection: TextDirection.rtl,
+                child: child!,
+              );
+            },
+
+            home: const HomeScreen(initialTab: 0),
           );
         },
       ),
