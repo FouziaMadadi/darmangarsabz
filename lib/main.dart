@@ -1,7 +1,17 @@
-import 'package:flutter/material.dart';
-import 'screens/home_page.dart';
 
-void main() {
+import 'package:darmajgar_sabz/screens/home_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+
+import 'firebase_options.dart';
+import 'package:provider/provider.dart';
+import 'providers/theme_provider.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -10,11 +20,35 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'درمانگر سبز',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Vazir'),
-      home: HerbPage(),
+    return ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'درمانگر سبز',
+            theme: ThemeData.light().copyWith(
+              scaffoldBackgroundColor: Colors.grey[100],
+              appBarTheme: const AppBarTheme(
+                backgroundColor: Colors.purple,
+                foregroundColor: Colors.white,
+              ),
+            ),
+            darkTheme: ThemeData.dark().copyWith(
+              scaffoldBackgroundColor: Colors.black,
+              appBarTheme: const AppBarTheme(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+              ),
+            ),
+            themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+
+            home: const HomeScreen(initialTab: 0,),
+          );
+        },
+      ),
     );
   }
 }
+
+

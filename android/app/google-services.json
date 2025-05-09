@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "180049823735",
+    "project_id": "darmanegeyahi",
+    "storage_bucket": "darmanegeyahi.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:180049823735:android:b40364ea22032c469b10f2",
+        "android_client_info": {
+          "package_name": "com.example.darmajgar_sabz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3yTUnhwFgejAG_nLBtGaJdzrsN0b5zoQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
