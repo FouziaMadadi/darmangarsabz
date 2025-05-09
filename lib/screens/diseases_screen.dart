@@ -2,7 +2,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:darmajgar_sabz/screens/details_screen.dart';
 import 'package:flutter/material.dart';
-import 'diseases/details_screen.dart';
 
 class DiseasesScreen extends StatefulWidget {
   final String searchText;
