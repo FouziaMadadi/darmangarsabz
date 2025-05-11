@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'herbals/plant_details_screen.dart';
+import 'details_screen.dart';
 
 class PlantsScreen extends StatelessWidget {
   final String searchText;
@@ -45,7 +45,11 @@ class PlantsScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PlantDetailsScreen(docId: plant.id),
+                    builder: (context) => PlantDetailsScreen(
+                      type: 'plant',
+                      docId: plant.id,
+                      collectionName: "darmanegeyahi",
+                    ),
                   ),
                 );
               },

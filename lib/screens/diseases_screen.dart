@@ -1,7 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:darmajgar_sabz/screens/details_screen.dart';
 import 'package:flutter/material.dart';
-import 'diseases/details_screen.dart';
 
 class DiseasesScreen extends StatefulWidget {
   final String searchText;
@@ -64,13 +64,18 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
                   onTap: () {
                     setState(() {
                       selectedIndex = index;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PlantDetailsScreen(
+                            type: 'disease',
+                            docId: bimari.id,
+                            collectionName: 'alamat_bimari',
+                          ),
+                        ),
+                      );
                     });
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => DetailsScreen(docId: bimari.id),
-                      ),
-                    );
+
                   },
                 );
               } catch (e) {
