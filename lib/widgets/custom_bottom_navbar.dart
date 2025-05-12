@@ -39,7 +39,7 @@ class CustomBottomNavBar extends StatelessWidget {
             index: 0,
           ),
           _buildNavItem(
-            icon: Icons.healing,
+            icon: Icons.medical_services,
             label: 'بیماری‌ها',
             index: 1,
           ),
