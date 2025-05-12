@@ -48,7 +48,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen>
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          centerTitle: true, // متن را وسط قرار می‌دهد
+          centerTitle: true,
           title: FutureBuilder<DocumentSnapshot>(
             future: FirebaseFirestore.instance
                 .collection(widget.collectionName.trim())
@@ -71,7 +71,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen>
                 style: TextStyle(
                   color: isDarkMode ? Colors.white : Colors.black87,
                   fontSize: 20,
-                  fontWeight: FontWeight.normal, // حذف حالت بولد
+                  fontWeight: FontWeight.normal,
                 ),
               );
             },
