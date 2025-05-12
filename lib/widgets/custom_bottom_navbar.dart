@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
@@ -14,64 +15,89 @@ class CustomBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-
-        Container(
-          height: 60,
-          margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-          decoration: BoxDecoration(
-            color: isDarkMode
-                ? Colors.deepPurple.shade800
-                : Colors.deepPurple.shade500,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.home,
-                  color: selectedIndex == 0 ? Colors.white : Colors.white70,
-                ),
-                onPressed: () => onTabSelected(0),
-              ),
-              const SizedBox(width: 60),
-              IconButton(
-                icon: Icon(
-                  Icons.favorite,
-                  color: selectedIndex == 2 ? Colors.white : Colors.white70,
-                ),
-                onPressed: () => onTabSelected(2),
-              ),
-            ],
-          ),
+    return Container(
+      height: 70,
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      decoration: BoxDecoration(
+        color: isDarkMode
+            ? Colors.deepPurple.shade800
+            : Colors.deepPurple.shade500,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+         // bottomLeft: Radius.circular(30),
+         // bottomRight: Radius.circular(30),
         ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildNavItem(
+            icon: Icons.local_florist,
+            label: 'گیاهان',
+            index: 0,
+          ),
+          _buildNavItem(
+            icon: Icons.healing,
+            label: 'بیماری‌ها',
+            index: 1,
+          ),
+          _buildNavItem(
+            icon: Icons.favorite,
+            label: 'علاقه‌مندی',
+            index: 2,
+          ),
+        ],
+      ),
+    );
+  }
 
-        Positioned(
-          bottom: 30,
-          child: GestureDetector(
-            onTap: () => onTabSelected(1),
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.deepPurple,
-                border: Border.all(
-                  color: Colors.deepPurple.shade100,
-                  width: 4,
-                ),
-              ),
-              child: const Icon(
-                Icons.nightlight_round,
-                color: Colors.white,
-                size: 28,
+  Widget _buildNavItem({
+    required IconData icon,
+    required String label,
+    required int index,
+  }) {
+    bool isSelected = selectedIndex == index;
+
+    return GestureDetector(
+      onTap: () => onTabSelected(index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.deepPurple.shade500 : Colors.transparent,
+          borderRadius: BorderRadius.circular(40),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              child: Icon(
+                icon,
+                color: isSelected ? Colors.white : Colors.white70,
+                size: isSelected ? 30 : 26,
               ),
             ),
-          ),
+            const SizedBox(height: 4),
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 300),
+              style: TextStyle(
+                color: isSelected ? Colors.white : Colors.white70,
+                fontSize: isSelected ? 13 : 12,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                fontFamily: 'Vazir',
+              ),
+              child: Text(label),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
+
+
+

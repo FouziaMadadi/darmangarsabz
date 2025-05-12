@@ -51,6 +51,14 @@ class _HomeScreenState extends State<HomeScreen> {
             fontSize: 18,
           ),
         ),
+        leading: IconButton(
+          icon: Icon(
+            themeProvider.isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,
+          ),
+          onPressed: () {
+            themeProvider.toggleTheme();
+          },
+        ),
         actions: [
           Builder(
             builder: (context) => IconButton(
@@ -63,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
 
-      endDrawer: const CustomDrawer.CustomeDrawer(),
+      endDrawer: CustomDrawer(),
 
       body: Column(
         children: [
@@ -75,15 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 searchText = value;
               });
             },
-          ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildTabButton('گیاهان', 0),
-              _buildTabButton('امراض', 1),
-              _buildTabButton('علاقه مندی ها', 2),
-            ],
           ),
 
           Expanded(
@@ -102,73 +101,19 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: selectedTab,
         onTabSelected: (index) {
-          if (index == 1) {
-            themeProvider.toggleTheme(); // سوئیچ دارک/لایت مود
-          } else {
-            setState(() {
-              if (index == 0) {
-                if (selectedTab == 0) {
-                  searchText = '';
-                }
-                selectedTab = 0;
-              } else if (index == 2) {
-                selectedTab = 2;
-              }
-            });
-          }
+          setState(() {
+            selectedTab = index;
+            searchText = '';
+          });
         },
       ),
     );
   }
-
-  Widget _buildTabButton(String title, int index) {
-    final isSelected = selectedTab == index;
-    final screenWidth = MediaQuery.of(context).size.width;
-    final tabCount = 3;
-    final horizontalPadding = 24.0;
-    final totalPadding = horizontalPadding * 2;
-    final totalSpacing = (tabCount - 1) * 3.0;
-    final tabWidth = (screenWidth - totalPadding - totalSpacing) / tabCount;
-
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
-    final inactiveColor = isDarkMode
-        ? Colors.white
-        : Colors.purple.shade200;
-
-    final inactiveTextColor = isDarkMode
-        ? Colors.black
-        : Colors.white;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedTab = index;
-        });
-      },
-      child: Container(
-        width: tabWidth,
-        margin: const EdgeInsets.symmetric(horizontal: 1.5),
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: isSelected ? Colors.deepPurple : Colors.transparent,
-            width: 2,
-          ),
-          color: isSelected ? Colors.deepPurple : inactiveColor,
-        ),
-        child: Center(
-          child: Text(
-            title,
-            style: TextStyle(
-              color: isSelected ? Colors.white : inactiveTextColor,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Vazir',
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
+
+
+
+
+
+
+

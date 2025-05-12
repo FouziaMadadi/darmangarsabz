@@ -42,9 +42,10 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             color: isDarkMode ? Colors.white70 : Colors.black54,
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(50),
             borderSide: BorderSide.none,
           ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         ),
         onChanged: _onChanged,
         style: TextStyle(
